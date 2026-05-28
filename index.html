@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أحلى صدفة</title>
+    <!-- استدعاء خطوط عربية جميلة من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- استدعاء مكتبة Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'cairo': ['Cairo', 'sans-serif'],
+                        'amiri': ['Amiri', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            100: '#ffe4e6',
+                            300: '#fda4af',
+                            500: '#f43f5e',
+                            700: '#be123c',
+                            900: '#881337',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            /* خلفية متدرجة رومانسية */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            min-height: 100vh;
+            overflow: hidden; /* لمنع ظهور شريط التمرير بسبب القلوب */
+        }
+
+        /* تنسيق البطاقة الزجاجية */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* تأثير مؤشر الآلة الكاتبة */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background-color: #f43f5e;
+            vertical-align: middle;
+            animation: blink 0.8s step-end infinite;
+            margin-right: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* حركات انتقال البطاقات */
+        .fade-in {
+            animation: fadeIn 0.8s forwards;
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(-20px) scale(0.95); }
+        }
+
+        /* تنسيق القلوب المتساقطة */
+        .heart {
+            position: absolute;
+            top: -10vh;
+            font-size: 1.5rem;
+            color: #f43f5e;
+            opacity: 0.6;
+            animation: fall linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="font-cairo flex flex-col items-center justify-center relative">
+
+    <!-- حاوية القلوب المتساقطة -->
+    <div id="hearts-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+    <!-- حاوية البطاقة الرئيسية -->
+    <main class="relative z-10 w-11/12 max-w-lg mx-auto">
+        
+        <!-- البطاقة -->
+        <div id="card" class="glass-card rounded-3xl p-8 md:p-12 text-center flex flex-col items-center justify-center min-h-[350px]">
+            
+            <!-- زر البداية -->
+            <button id="start-btn" class="bg-brand-500 hover:bg-brand-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 text-lg flex items-center gap-2">
+                <span>افتح الرسالة</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+                </svg>
+            </button>
+
+            <!-- منطقة النص المكتوب بالآلة الكاتبة -->
+            <div id="text-container" class="hidden flex-col items-center justify-center w-full">
+                <!-- أيقونة وردة تظهر مع النص -->
+                <div class="text-brand-500 mb-4 text-4xl opacity-80">
+                    🌹
+                </div>
+                
+                <!-- النص -->
+                <h1 class="font-amiri text-2xl md:text-3xl lg:text-4xl leading-relaxed text-gray-800 text-center min-h-[120px] flex items-center justify-center">
+                    <span id="typed-text"></span><span class="cursor" id="cursor"></span>
+                </h1>
+
+                <!-- أزرار التحكم -->
+                <div class="mt-8 flex gap-4 w-full justify-center">
+                    <button id="next-btn" class="hidden bg-white text-brand-500 border border-brand-500 hover:bg-brand-50 font-bold py-2 px-6 rounded-full shadow transition duration-300">
+                        التالي
+                    </button>
+                    <button id="replay-btn" class="hidden bg-gray-100 text-gray-600 hover:bg-gray-200 font-bold py-2 px-6 rounded-full shadow transition duration-300">
+                        إعادة القراءة
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- حقوق التصميم -->
+    <footer class="absolute bottom-4 left-0 right-0 text-center z-10 pointer-events-none">
+        <p class="text-gray-700 text-sm font-semibold opacity-70 drop-shadow-sm bg-white/30 inline-block px-4 py-1 rounded-full backdrop-blur-sm">
+            من إعداد قيس جازي ✨
+        </p>
+    </footer>
+
+    <script>
+        // مصفوفة البطاقات (الرسائل)
+        const messages = [
+            "إلى أرق إنسانة، إلى تقى...",
+            "يقولون أن أجمل الأشياء في الحياة تأتي دون تخطيط مسبق...",
+            "ولم أكن أؤمن بالصدف حقاً، حتى التقينا.",
+            "دخولك إلى حياتي كان 'أحلى صدفة'...",
+            "صدفة أضاءت أيامي، وزرعت الفرح في قلبي من جديد.",
+            "أنتِ لستِ مجرد صدفة يا تقى، بل أنتِ أجمل أقداري ❤️."
+        ];
+
+        let currentMessageIndex = 0;
+        let isTyping = false;
+        const typingSpeed = 70; // سرعة الكتابة بالملي ثانية
+        const eraseSpeed = 30; // سرعة مسح النص (غير مستخدمة حالياً، ننتقل للبطاقة التالية مباشرة)
+
+        // العناصر
+        const startBtn = document.getElementById('start-btn');
+        const textContainer = document.getElementById('text-container');
+        const typedTextElement = document.getElementById('typed-text');
+        const cursor = document.getElementById('cursor');
+        const nextBtn = document.getElementById('next-btn');
+        const replayBtn = document.getElementById('replay-btn');
+        const card = document.getElementById('card');
+
+        // بدء التجربة
+        startBtn.addEventListener('click', () => {
+            startBtn.classList.add('hidden');
+            textContainer.classList.remove('hidden');
+            textContainer.classList.add('flex');
+            typeMessage(messages[currentMessageIndex]);
+        });
+
+        // زر التالي
+        nextBtn.addEventListener('click', () => {
+            if (isTyping) return; // منع الضغط أثناء الكتابة
+            
+            // تأثير اختفاء البطاقة الحالية
+            card.classList.remove('fade-in');
+            card.classList.add('fade-out');
+
+            setTimeout(() => {
+                currentMessageIndex++;
+                typedTextElement.textContent = '';
+                nextBtn.classList.add('hidden');
+                
+                // تأثير ظهور البطاقة الجديدة
+                card.classList.remove('fade-out');
+                card.classList.add('fade-in');
+                
+                typeMessage(messages[currentMessageIndex]);
+            }, 500); // الانتظار حتى انتهاء حركة الاختفاء
+        });
+
+        // زر إعادة القراءة
+        replayBtn.addEventListener('click', () => {
+            if (isTyping) return;
+            
+            card.classList.remove('fade-in');
+            card.classList.add('fade-out');
+
+            setTimeout(() => {
+                currentMessageIndex = 0;
+                typedTextElement.textContent = '';
+                replayBtn.classList.add('hidden');
+                
+                card.classList.remove('fade-out');
+                card.classList.add('fade-in');
+                
+                typeMessage(messages[currentMessageIndex]);
+            }, 500);
+        });
+
+        // دالة الكتابة (الآلة الكاتبة)
+        function typeMessage(text) {
+            isTyping = true;
+            let i = 0;
+            typedTextElement.textContent = '';
+            cursor.style.display = 'inline-block';
+            nextBtn.classList.add('hidden');
+            replayBtn.classList.add('hidden');
+
+            function typeChar() {
+                if (i < text.length) {
+                    typedTextElement.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typeChar, typingSpeed);
+                } else {
+                    isTyping = false;
+                    // بعد الانتهاء من الكتابة، أظهر الزر المناسب
+                    if (currentMessageIndex < messages.length - 1) {
+                        nextBtn.classList.remove('hidden');
+                        nextBtn.classList.add('fade-in');
+                    } else {
+                        // إخفاء المؤشر في النهاية
+                        setTimeout(() => { cursor.style.display = 'none'; }, 2000);
+                        replayBtn.classList.remove('hidden');
+                        replayBtn.classList.add('fade-in');
+                    }
+                }
+            }
+            typeChar();
+        }
+
+        // --- تأثير القلوب المتساقطة في الخلفية ---
+        function createHeart() {
+            const heartsContainer = document.getElementById('hearts-container');
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // اختيار عشوائي لرمز القلب أو الوردة
+            const symbols = ['❤️', '💖', '✨', '🌸', '🤍'];
+            heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            
+            // موقع عشوائي وحجم عشوائي وسرعة عشوائية
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's'; // بين 4 و 7 ثواني
+            heart.style.fontSize = Math.random() * 1.5 + 0.5 + 'rem';
+            
+            heartsContainer.appendChild(heart);
+            
+            // إزالة القلب بعد انتهاء الحركة لتخفيف استهلاك الذاكرة
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
+        }
+
+        // إنشاء قلب جديد كل 400 مللي ثانية
+        setInterval(createHeart, 400);
+
+    </script>
+</body>
+</html>
+
+```
